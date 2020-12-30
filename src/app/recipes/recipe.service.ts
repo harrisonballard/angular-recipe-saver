@@ -1,48 +1,54 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+
+import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
 
-import { Recipe } from './recipe.model';
+
 
 @Injectable()
 export class RecipeService {
-
+    recipesChanged = new Subject<Recipe[]>();
 
     private recipes: Recipe[] = [
         new Recipe(
-            'Thai Chicken', 
-            'Boneless Thai chicken', 
-            'https://bigoven-res.cloudinary.com/image/upload/sweetandsourstickythaiboneless-3a944d.jpg',
+            'Ghost Pepper Chicken Tikka Masala', 
+            'Easy overnight chicken tikka recipe with a good kick!', 
+            'https://bigoven-res.cloudinary.com/image/upload/d_recipe-no-image.jpg,t_recipe-480/chicken-tikka-masala-7.jpg',
             [
-                new Ingredient('butter', 1),
-                new Ingredient('chicken thighs', 2),
-                new Ingredient('cilantro', 1),
-                new Ingredient('sweet chili sauce', 1),
-                new Ingredient('soy sauce', 1),
-                new Ingredient('garlic', 1),
-                new Ingredient('fish sauce', 1),
-                new Ingredient('ginger', 1),
-                new Ingredient('lime', 1)
+                new Ingredient('Garlic Clove', 3),
+                new Ingredient('Ginger', 2),
+                new Ingredient('Turmeric', 2),
+                new Ingredient('Garam Masala', 1),
+                new Ingredient('Coriander', 1),
+                new Ingredient('Cumin', 1),
+                new Ingredient('Greek Yogurt', 0.5),
+                new Ingredient('Boneless Skinless Chicken Breast', 1),
+                new Ingredient('Onion', 1),
+                new Ingredient('Tomato Paste', 2),
+                new Ingredient('Cardamom Pods', 3),
+                new Ingredient('Ghost Pepper Flakes', 0.5),
+                new Ingredient('Can Whole Peeled Tomatoes', 1),
+                new Ingredient('Can Coconut Milk', 1)
             ]),
 
             new Recipe(
-            'New Orleans Gumbo', 
-            'Seafood gumbo', 
-            'https://bigoven-res.cloudinary.com/image/upload/d_recipe-no-image.jpg/new-orleans-creole-gumbo.jpg',
+            'Shrimp Boil', 
+            'Quick and easy indoor shrimp boil.', 
+            //may need to change this image to one from bigoven?
+            'https://bigoven-res.cloudinary.com/image/upload/d_recipe-no-image.jpg,t_recipe-480/the-original-old-bay-shrimp-boil-sh-2.jpg',
             [
-                new Ingredient('onion', 3),
-                new Ingredient('green bell pepper', 1),
-                new Ingredient('chicken breast', 1),
-                new Ingredient('andouille sausage', 2),
-                new Ingredient('shrimp', 20),
-                new Ingredient('garlic', 3),
-                new Ingredient('tomatoes', 2),
-                new Ingredient('celery', 1),
-                new Ingredient('lemon', 3),
-                new Ingredient('tabasco', 1),
-                new Ingredient('worcestershire', 2),
-                new Ingredient('butter', 1),
-                new Ingredient('okra', 10)
+                new Ingredient('Old Bay', 3),
+                new Ingredient('Onion', 3),
+                new Ingredient('Celery', 6),
+                new Ingredient('Lemon', 3),
+                new Ingredient('Small red potato', 6),
+                new Ingredient('Shrimp', 20),
+                new Ingredient('Green Bell Pepper', 3),
+                new Ingredient('Butter', 1),
+                new Ingredient('Salt', 1),
+                new Ingredient('Pepper', 2),
             ]),     
         ];
 
@@ -59,5 +65,15 @@ export class RecipeService {
 
       addIngredientsToShoppingList(ingredients: Ingredient[]) {
         this.slService.addIngredients(ingredients);
+      }
+
+      addRecipe(recipe: Recipe) {
+        this.recipes.push(recipe);
+        this.recipesChanged.next(this.recipes.slice());
+      }
+
+      updateRecipe(index: number, newRecipe: Recipe) {
+          this.recipes[index] = newRecipe;
+          this.recipesChanged.next(this.recipes.slice());
       }
 }
