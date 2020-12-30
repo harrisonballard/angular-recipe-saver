@@ -12,19 +12,20 @@ import { RecipeService } from '../recipe.service';
 export class RecipeDetailComponent implements OnInit {
   recipe: Recipe;
   id: number;
-  
+
   constructor(private recipeService: RecipeService,
               private route: ActivatedRoute,
-              private router: Router
-              ) { }
+              private router: Router) {
+  }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      (params: Params) => {
-        this.id = +params['id'];
-        this.recipe = this.recipeService.getRecipe(this.id);
-      }
-    )
+    this.route.params
+      .subscribe(
+        (params: Params) => {
+          this.id = +params['id'];
+          this.recipe = this.recipeService.getRecipe(this.id);
+        }
+      );
   }
 
   onAddToShoppingList() {
@@ -32,9 +33,13 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onEditRecipe() {
-    this.router.navigate(['edit'], {relativeTo: this.route });
-    //more complex nav solution below for practice w id, works the same
+    this.router.navigate(['edit'], {relativeTo: this.route});
     // this.router.navigate(['../', this.id, 'edit'], {relativeTo: this.route});
+  }
+
+  onDeleteRecipe() {
+    this.recipeService.deleteRecipe(this.id);
+    this.router.navigate(['/recipes']);
   }
 
 }
